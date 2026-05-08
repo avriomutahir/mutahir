@@ -1,0 +1,20 @@
+<svg width="1280" height="800" viewBox="0 0 1280 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="a" x1="170" y1="40" x2="1110" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2B1D1B"/>
+      <stop offset="1" stop-color="#111822"/>
+    </linearGradient>
+    <linearGradient id="b" x1="238" y1="236" x2="1022" y2="624" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F28A52"/>
+      <stop offset="1" stop-color="#FFCF9A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="800" rx="38" fill="url(#a)"/>
+  <rect x="96" y="96" width="1088" height="608" rx="30" fill="#151D28" stroke="#6B4B3A" stroke-opacity="0.42"/>
+  <path d="M220 598C296 474 370 416 444 424C518 432 560 508 636 516C712 524 766 450 842 438C918 426 994 464 1060 562" stroke="url(#b)" stroke-width="16" stroke-linecap="round"/>
+  <rect x="224" y="186" width="472" height="184" rx="22" fill="#202A38"/>
+  <rect x="736" y="186" width="320" height="184" rx="22" fill="#202A38"/>
+  <rect x="224" y="400" width="832" height="126" rx="22" fill="#202A38"/>
+  <text x="260" y="266" fill="#FFE4C8" font-family="Baskerville, Times New Roman, serif" font-size="68">PORTFOLIO</text>
+  <text x="260" y="322" fill="#FEC390" font-family="Avenir Next, Segoe UI, sans-serif" font-size="30" letter-spacing="4">REBRAND SYSTEM</text>
+</svg>
