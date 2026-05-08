@@ -1,0 +1,22 @@
+<svg width="1280" height="800" viewBox="0 0 1280 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="a" x1="0" y1="0" x2="1280" y2="800" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#152438"/>
+      <stop offset="1" stop-color="#08121E"/>
+    </linearGradient>
+    <linearGradient id="b" x1="220" y1="176" x2="990" y2="650" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5DA0FF"/>
+      <stop offset="1" stop-color="#8EF0FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="800" rx="38" fill="url(#a)"/>
+  <rect x="70" y="70" width="1140" height="660" rx="28" fill="#0E1C2C" stroke="#4A6F99" stroke-opacity="0.35"/>
+  <path d="M150 606L264 516L358 544L472 422L596 466L744 338L856 360L976 246L1112 266" stroke="url(#b)" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="976" cy="246" r="14" fill="#96EDFF"/>
+  <rect x="160" y="210" width="188" height="88" rx="14" fill="#132842"/>
+  <rect x="364" y="210" width="188" height="88" rx="14" fill="#132842"/>
+  <rect x="568" y="210" width="188" height="88" rx="14" fill="#132842"/>
+  <text x="168" y="262" fill="#D9ECFF" font-family="Avenir Next, Segoe UI, sans-serif" font-size="26">Revenue</text>
+  <text x="372" y="262" fill="#D9ECFF" font-family="Avenir Next, Segoe UI, sans-serif" font-size="26">Forecast</text>
+  <text x="576" y="262" fill="#D9ECFF" font-family="Avenir Next, Segoe UI, sans-serif" font-size="26">Scenarios</text>
+</svg>

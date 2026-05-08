@@ -1,0 +1,21 @@
+<svg width="760" height="920" viewBox="0 0 760 920" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="760" y2="920" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F48B52"/>
+      <stop offset="1" stop-color="#2A5AB8"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(570 210) rotate(132) scale(490 365)">
+      <stop stop-color="#FFF1DC" stop-opacity="0.72"/>
+      <stop offset="1" stop-color="#FFF1DC" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="760" height="920" rx="46" fill="url(#bg)"/>
+  <rect width="760" height="920" rx="46" fill="url(#glow)"/>
+  <g opacity="0.9">
+    <circle cx="380" cy="332" r="126" fill="#FCE6C8"/>
+    <path d="M190 770C190 651 274 560 380 560C486 560 570 651 570 770V868H190V770Z" fill="#0F223B"/>
+    <path d="M248 755C248 683 307 624 380 624C453 624 512 683 512 755V868H248V755Z" fill="#1B3A67"/>
+  </g>
+  <rect x="54" y="54" width="652" height="812" rx="34" stroke="#FFEAD7" stroke-opacity="0.45" stroke-width="2"/>
+  <text x="68" y="840" fill="#FFF8EF" font-family="Avenir Next, Segoe UI, sans-serif" font-size="28" letter-spacing="4">PLACEHOLDER PORTRAIT</text>
+</svg>

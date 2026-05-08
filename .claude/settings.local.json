@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:developerfolio.js.org)",
+      "WebFetch(domain:github.com)",
+      "Bash(npm run *)"
+    ]
+  }
+}
