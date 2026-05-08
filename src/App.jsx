@@ -179,7 +179,7 @@ function HomePage({ year }) {
 
           <aside className="hero-card reveal-delay-1">
             <div className="profile-frame">
-              <img src="/images/profile-placeholder.svg" alt="Mutahir Hussain — Senior Full-Stack &amp; AI Developer" className="profile-image" />
+              <img src={`${import.meta.env.BASE_URL}images/profile-placeholder.svg`} alt="Mutahir Hussain — Senior Full-Stack &amp; AI Developer" className="profile-image" />
             </div>
             <p className="card-label">What I build</p>
             <h3>Full-stack systems, cross-platform mobile apps, and AI-driven solutions.</h3>
