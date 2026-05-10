@@ -24,14 +24,16 @@ npm run dev
 npm run build
 ```
 
-## GitHub Pages deployment
+## GitHub Pages deployment (branch-based)
 
-The repository includes a GitHub Actions workflow at `.github/workflows/deploy.yml`.
+This project is configured to publish the `dist` build output to the `gh-pages` branch.
 
 1. Push the project to a GitHub repository.
-2. In GitHub, open Settings > Pages.
-3. Set the source to GitHub Actions.
-4. Push to the `main` branch to trigger deployment.
+2. Run `npm run deploy`.
+3. In GitHub, open Settings > Pages.
+4. Set Source to `Deploy from a branch`.
+5. Set Branch to `gh-pages` and folder to `/ (root)`.
+6. Save and open your GitHub Pages URL.
 
 ## Custom domain setup
 

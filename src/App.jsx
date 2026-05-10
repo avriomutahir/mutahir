@@ -1,6 +1,12 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, Navigate, Route, Routes, useParams } from 'react-router-dom'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { portfolioHistory } from './portfolioData'
+
+gsap.registerPlugin(ScrollTrigger)
+
+// ── Static data ───────────────────────────────────────────────────────────────
 
 const skillsData = [
   {
@@ -25,71 +31,109 @@ const skillsData = [
   },
 ]
 
-const achievementsData = [
-  {
-    title: '10+ Years Industry Experience',
-    description: 'Over a decade delivering production software across mobile, web, backend, and AI domains for startups, agencies, and enterprise clients.',
-    icon: '🏆',
-  },
-  {
-    title: '40+ Projects Shipped',
-    description: 'From solo-built MVPs to multi-team enterprise platforms — consistently delivering on scope, quality, and timeline.',
-    icon: '🚀',
-  },
-  {
-    title: 'Cross-Platform Mobile Expert',
-    description: 'Published iOS and Android applications built with React Native, achieving 4.5+ star ratings and thousands of active users.',
-    icon: '📱',
-  },
-  {
-    title: 'Enterprise AI Systems',
-    description: 'Designed and deployed production AI systems including OCR document processing and multi-class sentiment analysis serving enterprise clients.',
-    icon: '🤖',
-  },
-  {
-    title: 'Full-Stack Architecture',
-    description: 'End-to-end ownership from database schema and API design through frontend UI — across four major technology stacks.',
-    icon: '⚡',
-  },
-  {
-    title: 'Multi-Tenant SaaS Builder',
-    description: 'Delivered scalable multi-tenant platforms with role-based access control, real-time dashboards, and ERP integrations.',
-    icon: '🏗️',
-  },
-]
-
-const socialLinks = [
-  { label: 'Email', href: 'mailto:hussaincor01@gmail.com', display: 'hussaincor01@gmail.com' },
-  { label: 'GitHub', href: 'https://github.com/', display: 'github.com/mutahirhussain' },
-  { label: 'LinkedIn', href: 'https://linkedin.com/in/', display: 'linkedin.com/in/mutahirhussain' },
-]
-
 const workHistory = [
   {
-    period: '2020 - Present',
+    period: '2020 – Present',
     role: 'Senior Software Developer',
     company: 'Full-Stack & AI Consultancy',
     summary: 'Leading delivery of mobile apps (React Native), web platforms (React JS), backend systems (C# / PHP Laravel), and AI solutions including OCR pipelines and sentiment analysis engines for enterprise clients.',
   },
   {
-    period: '2016 - 2020',
+    period: '2016 – 2020',
     role: 'Software Developer',
     company: 'Product Engineering Studio',
     summary: 'Developed scalable web and mobile applications across fintech, e-commerce, and SaaS verticals. Introduced Laravel-based API standards and React component libraries adopted across multiple product teams.',
   },
   {
-    period: '2014 - 2016',
+    period: '2014 – 2016',
     role: 'Junior Software Developer',
     company: 'Digital Agency',
     summary: 'Built client websites, internal dashboards, and custom CMS solutions using PHP and JavaScript. Gained hands-on experience across the full SDLC from requirements through deployment.',
   },
 ]
 
-const resumeStats = [
-  { label: 'Years of experience', value: '10+' },
-  { label: 'Projects delivered', value: '40+' },
-  { label: 'Technologies mastered', value: '15+' },
+const testimonialsData = [
+  {
+    name: 'Sarah Chen',
+    role: 'CTO, FinTech Startup',
+    quote: 'Mutahir delivered our React Native app on time and to an exceptional standard. The codebase is clean, well-structured, and our team has been building on it seamlessly ever since.',
+    initials: 'SC',
+  },
+  {
+    name: 'David Müller',
+    role: 'Head of Product, SaaS Platform',
+    quote: 'Working with Mutahir on our Laravel + React platform was a game-changer. He took full ownership of the architecture and delivered a multi-tenant system that scaled far beyond our expectations.',
+    initials: 'DM',
+  },
+  {
+    name: 'Aisha Patel',
+    role: 'Lead Data Scientist, Enterprise Client',
+    quote: 'The OCR and sentiment analysis pipeline Mutahir built processes over 10,000 documents daily without a hitch. His ability to bridge AI research and production engineering is rare and invaluable.',
+    initials: 'AP',
+  },
 ]
+
+const faqData = [
+  {
+    question: 'What types of projects do you take on?',
+    answer: 'I specialise in cross-platform mobile apps (React Native), full-stack web platforms (React JS + Laravel or C#), and AI integrations including OCR and sentiment analysis. I work across the full lifecycle from architecture through deployment.',
+  },
+  {
+    question: 'Do you work with startups or enterprise clients?',
+    answer: "Both. I've built MVPs for early-stage startups and delivered large-scale platforms for enterprise clients. The approach adapts to team size, timeline, and technical constraints of each engagement.",
+  },
+  {
+    question: 'What does a typical engagement look like?',
+    answer: "It starts with a brief discovery call to understand your goals and existing stack. From there I produce an architecture outline, agree a timeline, and begin development in structured sprints with regular check-ins and demos.",
+  },
+  {
+    question: 'Can you work within an existing team?',
+    answer: "Absolutely. I'm experienced collaborating with cross-functional teams across time zones. I can plug in as a senior contributor, tech lead, or individual contributor depending on what the project needs.",
+  },
+  {
+    question: 'How do I get started?',
+    answer: "The easiest way is to email me at hussaincor01@gmail.com with a short description of your project — what you're building, your timeline, and any tech constraints. I'll respond within 1–2 business days.",
+  },
+]
+
+const socialLinks = [
+  { label: 'Email', href: 'mailto:hussaincor01@gmail.com', display: 'hussaincor01@gmail.com', copyText: 'hussaincor01@gmail.com' },
+  { label: 'GitHub', href: 'https://github.com/', display: 'github.com/mutahirhussain' },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/', display: 'linkedin.com/in/mutahirhussain' },
+]
+
+const heroStats = [
+  { value: '10+', label: 'Years exp.' },
+  { value: '40+', label: 'Projects' },
+  { value: '15+', label: 'Technologies' },
+]
+
+// ── GSAP scroll-reveal hook ───────────────────────────────────────────────────
+
+function useScrollReveal() {
+  useLayoutEffect(() => {
+    // Give React time to paint initial invisible state before attaching triggers
+    const ctx = gsap.context(() => {
+      ScrollTrigger.batch('.reveal', {
+        onEnter: (batch) => {
+          gsap.to(batch, {
+            opacity: 1,
+            y: 0,
+            stagger: 0.13,
+            duration: 0.92,
+            ease: 'power3.out',
+          })
+        },
+        start: 'top 90%',
+        once: true,
+      })
+    })
+
+    return () => ctx.revert()
+  }, [])
+}
+
+// ── Shared components ─────────────────────────────────────────────────────────
 
 function Loader() {
   return (
@@ -104,28 +148,208 @@ function Loader() {
   )
 }
 
-function SectionTitle({ eyebrow, title, text }) {
+function SectionHeading({ eyebrow, title, text }) {
   return (
     <div className="section-heading reveal">
-      <span>{eyebrow}</span>
+      <span className="eyebrow">{eyebrow}</span>
       <h2>{title}</h2>
-      <p>{text}</p>
+      {text && <p>{text}</p>}
     </div>
   )
 }
 
-function HomePage({ year }) {
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+function FAQItem({ question, answer }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div className={`faq-item${open ? ' faq-open' : ''}`}>
+      <button
+        className="faq-trigger"
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+      >
+        <span>{question}</span>
+        <span className="faq-icon" aria-hidden="true">+</span>
+      </button>
+      <div className="faq-body" aria-hidden={!open}>
+        <p>{answer}</p>
+      </div>
+    </div>
+  )
+}
+
+function CopyButton({ text }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text)
+    } catch {
+      const el = document.createElement('textarea')
+      el.value = text
+      document.body.appendChild(el)
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
     }
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2200)
+  }
+
+  return (
+    <button
+      type="button"
+      className={`copy-btn${copied ? ' copy-btn-success' : ''}`}
+      onClick={handleCopy}
+      title="Copy to clipboard"
+    >
+      <span className="copy-icon" aria-hidden="true">{copied ? '✓' : '⧉'}</span>
+      <span>{copied ? 'Copied!' : 'Copy'}</span>
+    </button>
+  )
+}
+
+// ── Portfolio carousel ────────────────────────────────────────────────────────
+
+const CAROUSEL_GAP = 16
+
+function PortfolioCarousel() {
+  const outerRef = useRef(null)
+  const trackRef = useRef(null)
+  const currentRef = useRef(0)  // current slide index — no state needed (no UI indicators)
+  const accDelta = useRef(0)    // accumulated wheel delta between threshold triggers
+  const isAnimating = useRef(false)
+  const total = portfolioHistory.length
+
+  const goTo = useCallback((index) => {
+    if (isAnimating.current) return
+    // Clamp — no looping, stops at first / last
+    const next = Math.max(0, Math.min(index, total - 1))
+    if (next === currentRef.current) return
+
+    const firstSlide = trackRef.current?.children[0]
+    if (!firstSlide) return
+    const slideW = firstSlide.offsetWidth + CAROUSEL_GAP
+
+    isAnimating.current = true
+    gsap.to(trackRef.current, {
+      x: -(next * slideW),
+      duration: 0.72,
+      ease: 'power3.inOut',
+      onComplete: () => {
+        isAnimating.current = false
+        accDelta.current = 0 // reset accumulator after each completed move
+      },
+    })
+    currentRef.current = next
+  }, [total])
+
+  // Window-level wheel listener so it fires regardless of cursor position.
+  // Only intercepts scroll when the carousel is in the viewport AND the carousel
+  // still has slides to navigate. At the boundaries we do NOT call
+  // preventDefault() — the event propagates and the page scrolls normally.
+  useEffect(() => {
+    const THRESHOLD = 60
+
+    const onWheel = (e) => {
+      const outer = outerRef.current
+      if (!outer) return
+
+      // Check carousel is at least 40 % visible in the viewport
+      const { top, bottom, height } = outer.getBoundingClientRect()
+      const visible = Math.min(bottom, window.innerHeight) - Math.max(top, 0)
+      if (visible / height < 0.4) return
+
+      // Vertical scroll (up/down) drives the carousel
+      const delta = e.deltaY
+
+      const atEnd   = currentRef.current >= total - 1
+      const atStart = currentRef.current <= 0
+
+      // At last slide going forward → release: page scrolls down
+      if (delta > 0 && atEnd) { accDelta.current = 0; return }
+      // At first slide going backward → release: page scrolls up
+      if (delta < 0 && atStart) { accDelta.current = 0; return }
+
+      // Otherwise own this scroll event
+      e.preventDefault()
+      accDelta.current += delta
+
+      if (accDelta.current >= THRESHOLD) {
+        accDelta.current = 0
+        goTo(currentRef.current + 1)
+      } else if (accDelta.current <= -THRESHOLD) {
+        accDelta.current = 0
+        goTo(currentRef.current - 1)
+      }
+    }
+
+    window.addEventListener('wheel', onWheel, { passive: false })
+    return () => window.removeEventListener('wheel', onWheel)
+  }, [goTo, total])
+
+  // Reposition track on window resize so slides don't drift
+  useEffect(() => {
+    const onResize = () => {
+      const firstSlide = trackRef.current?.children[0]
+      if (!firstSlide) return
+      gsap.set(trackRef.current, {
+        x: -(currentRef.current * (firstSlide.offsetWidth + CAROUSEL_GAP)),
+      })
+    }
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  return (
+    <div className="carousel reveal">
+      <div className="carousel-outer" ref={outerRef}>
+        <div className="carousel-track" ref={trackRef}>
+          {portfolioHistory.map((item) => (
+            <div className="carousel-slide" key={item.slug}>
+              <Link className="carousel-card" to={`/portfolio/${item.slug}`}>
+                <div className="carousel-card-image-wrap">
+                  <img
+                    src={item.image}
+                    alt={item.imageAlt}
+                    className="carousel-card-image"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="carousel-card-info">
+                  <p className="portfolio-type">{item.type}</p>
+                  <h3>{item.title}</h3>
+                  <p className="portfolio-summary">{item.summary}</p>
+                  <span className="carousel-cta">View Case Study →</span>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
+      <p className="carousel-hint">
+        <span className="carousel-hint-icon">↑ ↓</span>
+        Scroll down to explore projects
+      </p>
+    </div>
+  )
+}
+
+// ── Home page ─────────────────────────────────────────────────────────────────
+
+function HomePage({ year }) {
+  useScrollReveal()
+
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   return (
     <>
-      <header className="hero">
-        <nav className="topbar reveal">
+      {/* ─ Fixed nav ─ */}
+      <nav className="topbar">
+        <div className="topbar-inner">
           <div className="brand-block">
             <span className="brand-mark">MH</span>
             <div>
@@ -134,79 +358,75 @@ function HomePage({ year }) {
             </div>
           </div>
           <div className="nav-links">
-            <button type="button" className="link-button" onClick={() => scrollToSection('intro')}>
-              Intro
-            </button>
-            <button type="button" className="link-button" onClick={() => scrollToSection('skills')}>
-              Skills
-            </button>
-            <button type="button" className="link-button" onClick={() => scrollToSection('work')}>
-              Experience
-            </button>
-            <button type="button" className="link-button" onClick={() => scrollToSection('portfolio')}>
-              Portfolio
-            </button>
-            <button type="button" className="link-button" onClick={() => scrollToSection('achievements')}>
-              Achievements
-            </button>
-            <button type="button" className="link-button" onClick={() => scrollToSection('contact')}>
-              Contact
-            </button>
+            <button type="button" className="link-button" onClick={() => scrollTo('skills')}>Skills</button>
+            <button type="button" className="link-button" onClick={() => scrollTo('work')}>Experience</button>
+            <button type="button" className="link-button" onClick={() => scrollTo('portfolio')}>Portfolio</button>
+            <button type="button" className="link-button" onClick={() => scrollTo('testimonials')}>Reviews</button>
+            <button type="button" className="link-button" onClick={() => scrollTo('faq')}>FAQ</button>
+            <button type="button" className="link-button pill" onClick={() => scrollTo('contact')}>Contact</button>
           </div>
-        </nav>
+        </div>
+      </nav>
 
-        <section className="hero-content reveal" id="intro">
-          <div className="hero-copy">
-            <p className="eyebrow">Senior Full-Stack &amp; AI Developer</p>
-            <h1>
-              10+ years building mobile, web, and AI-powered software that ships and scales.
-            </h1>
-            <p className="hero-text">
-              I'm Mutahir Hussain — a senior software developer specialising in React Native, React JS, C#, and PHP Laravel.
-              I also design and build AI solutions including OCR pipelines and sentiment analysis systems. Whether it's a
-              consumer mobile app, an enterprise web platform, or an intelligent data-processing engine, I deliver clean,
-              production-ready code that teams can build on.
-            </p>
-            <div className="hero-actions">
-              <button type="button" className="primary-button" onClick={() => scrollToSection('resume')}>
-                View Resume
-              </button>
-              <button type="button" className="secondary-button" onClick={() => scrollToSection('portfolio')}>
-                Explore Portfolio
-              </button>
+      {/* ─ Hero ─ */}
+      <section className="hero-section" id="intro">
+        <div className="container">
+          <div className="hero-grid">
+            <div className="hero-copy reveal">
+              <span className="eyebrow">Senior Full-Stack &amp; AI Developer</span>
+              <h1 className="hero-h1">10+ years building mobile, web &amp; AI software that ships.</h1>
+              <p className="hero-text">
+                I'm Mutahir Hussain — a senior developer specialising in React Native, React JS, C#, and
+                PHP Laravel. I design and build AI solutions including OCR pipelines and sentiment analysis
+                systems that scale in production.
+              </p>
+              <div className="hero-actions">
+                <button type="button" className="btn-primary" onClick={() => scrollTo('portfolio')}>
+                  View My Work
+                </button>
+                <button type="button" className="btn-secondary" onClick={() => scrollTo('contact')}>
+                  Get In Touch
+                </button>
+              </div>
             </div>
+
+            <aside className="hero-card reveal">
+              <div className="profile-frame">
+                <img
+                  src="/images/profile-placeholder.svg"
+                  alt="Mutahir Hussain — Senior Full-Stack & AI Developer"
+                  className="profile-image"
+                />
+              </div>
+              <div className="hero-card-stats">
+                {heroStats.map((stat) => (
+                  <div key={stat.label} className="hero-stat">
+                    <strong>{stat.value}</strong>
+                    <span>{stat.label}</span>
+                  </div>
+                ))}
+              </div>
+            </aside>
           </div>
+        </div>
+      </section>
 
-          <aside className="hero-card reveal-delay-1">
-            <div className="profile-frame">
-              <img src={`${import.meta.env.BASE_URL}images/profile-placeholder.svg`} alt="Mutahir Hussain — Senior Full-Stack &amp; AI Developer" className="profile-image" />
-            </div>
-            <p className="card-label">What I build</p>
-            <h3>Full-stack systems, cross-platform mobile apps, and AI-driven solutions.</h3>
-            <ul>
-              <li>React Native &amp; React JS</li>
-              <li>C# &amp; PHP Laravel backends</li>
-              <li>OCR &amp; Sentiment Analysis AI</li>
-            </ul>
-          </aside>
-        </section>
-      </header>
-
-      <main>
-        <section className="section-grid" id="skills">
-          <SectionTitle
+      {/* ─ Skills ─ */}
+      <section className="section section-alt" id="skills">
+        <div className="container">
+          <SectionHeading
             eyebrow="Technical expertise"
             title="Skills & Technologies"
             text="A decade of hands-on experience across four major technology domains — from mobile and web to backend systems and applied AI."
           />
           <div className="skills-grid">
-            {skillsData.map((cat, index) => (
-              <article className="skill-category-card reveal" key={cat.category} style={{ animationDelay: `${index * 100}ms` }}>
-                <div className="skill-category-header">
+            {skillsData.map((cat) => (
+              <article className="skill-card reveal" key={cat.category}>
+                <div className="skill-card-header">
                   <span className="skill-emoji" role="img" aria-label={cat.category}>{cat.emoji}</span>
                   <h3>{cat.category}</h3>
                 </div>
-                <div className="chip-wrap skill-chips">
+                <div className="chip-wrap">
                   {cat.skills.map((skill) => (
                     <span className="chip" key={skill}>{skill}</span>
                   ))}
@@ -214,17 +434,20 @@ function HomePage({ year }) {
               </article>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="section-grid" id="work">
-          <SectionTitle
+      {/* ─ Work History ─ */}
+      <section className="section" id="work">
+        <div className="container">
+          <SectionHeading
             eyebrow="Career path"
             title="Work History"
-            text="Over a decade of hands-on experience spanning mobile, web, backend, and AI — from agency projects to enterprise product platforms."
+            text="Over a decade spanning mobile, web, backend, and AI — from agency projects to enterprise product platforms."
           />
           <div className="timeline">
-            {workHistory.map((item, index) => (
-              <article className="timeline-card reveal" key={item.period} style={{ animationDelay: `${index * 120}ms` }}>
+            {workHistory.map((item) => (
+              <article className="timeline-card reveal" key={item.period}>
                 <p className="timeline-period">{item.period}</p>
                 <h3>{item.role}</h3>
                 <h4>{item.company}</h4>
@@ -232,242 +455,226 @@ function HomePage({ year }) {
               </article>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="section-grid resume-section" id="resume">
-          <SectionTitle
-            eyebrow="Professional snapshot"
-            title="Resume"
-            text="A decade-long track record across mobile, web, backend, and AI — delivering quality software for startups, agencies, and enterprise clients alike."
-          />
-          <div className="resume-panel reveal">
-            <div className="stat-grid">
-              {resumeStats.map((item) => (
-                <div className="stat-card" key={item.label}>
-                  <strong>{item.value}</strong>
-                  <span>{item.label}</span>
-                </div>
-              ))}
-            </div>
-            <div className="resume-copy">
-              <h3>Mutahir Hussain — Senior Full-Stack &amp; AI Developer</h3>
-              <p>
-                Experienced in the full software development lifecycle: from architecture and API design to mobile UI,
-                React web apps, C# services, and AI integrations. I work well independently and as part of cross-functional
-                teams across time zones.
-              </p>
-              <button type="button" className="primary-button" onClick={() => scrollToSection('contact')}>
-                Request Full Resume
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <section className="section-grid" id="portfolio">
-          <SectionTitle
+      {/* ─ Portfolio ─ */}
+      <section className="section section-alt" id="portfolio">
+        <div className="container">
+          <SectionHeading
             eyebrow="Selected work"
             title="Portfolio"
-            text="A selection of real projects across AI, mobile, and full-stack web — each with structured role, impact, and tech stack details."
+            text="Real projects across AI, mobile, and full-stack web — each with structured role, impact, and tech stack details."
           />
-          <div className="portfolio-grid">
-            {portfolioHistory.map((item, index) => (
-              <Link
-                className="portfolio-card reveal portfolio-link-card"
-                key={item.slug}
-                to={`/portfolio/${item.slug}`}
-                style={{ animationDelay: `${index * 140}ms` }}
-              >
-                <div className="portfolio-image-wrap">
-                  <img src={item.image} alt={item.imageAlt} className="portfolio-image" loading="lazy" />
-                </div>
-                <p>{item.type}</p>
-                <h3>{item.title}</h3>
-                <span>{item.summary}</span>
-              </Link>
-            ))}
-          </div>
-        </section>
+          <PortfolioCarousel />
+        </div>
+      </section>
 
-        <section className="section-grid" id="achievements">
-          <SectionTitle
-            eyebrow="Track record"
-            title="Achievements"
-            text="Key milestones from 10+ years of building software across mobile, web, backend, and AI."
+      {/* ─ Testimonials ─ */}
+      <section className="section" id="testimonials">
+        <div className="container">
+          <SectionHeading
+            eyebrow="Client feedback"
+            title="Testimonials"
+            text="What clients and collaborators say about working with me."
           />
-          <div className="achievement-grid">
-            {achievementsData.map((item, index) => (
-              <article className="achievement-card reveal" key={item.title} style={{ animationDelay: `${index * 100}ms` }}>
-                <span className="achievement-icon" role="img" aria-label={item.title}>{item.icon}</span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
+          <div className="testimonials-grid">
+            {testimonialsData.map((t) => (
+              <article className="testimonial-card reveal" key={t.name}>
+                <blockquote>"{t.quote}"</blockquote>
+                <div className="testimonial-author">
+                  <div className="testimonial-avatar" aria-hidden="true">{t.initials}</div>
+                  <div>
+                    <p className="testimonial-name">{t.name}</p>
+                    <p className="testimonial-role">{t.role}</p>
+                  </div>
+                </div>
               </article>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="section-grid about-layout" id="about">
-          <SectionTitle
-            eyebrow="Background"
-            title="About Me"
-            text="Senior software developer with a passion for turning complex problems into elegant, maintainable, and impactful software."
+      {/* ─ FAQ ─ */}
+      <section className="section section-alt" id="faq">
+        <div className="container">
+          <SectionHeading
+            eyebrow="Common questions"
+            title="FAQ"
+            text="Answers to the questions I hear most often about working together."
           />
-          <div className="about-card reveal">
-            <p>
-              I'm Mutahir Hussain, a senior software developer with more than 10 years of professional experience building
-              software across mobile, web, and AI domains. I specialise in React Native for cross-platform mobile apps,
-              React JS for modern web interfaces, and PHP Laravel and C# for robust backend systems and APIs.
-            </p>
-            <p>
-              Beyond traditional development, I work on AI-driven projects including Optical Character Recognition (OCR)
-              for intelligent document processing and Sentiment Analysis for understanding customer and user behaviour at
-              scale. I care deeply about code quality, system design, and delivering software that solves real business
-              problems — on time and built to last.
-            </p>
+          <div className="faq-list reveal">
+            {faqData.map((item) => (
+              <FAQItem key={item.question} question={item.question} answer={item.answer} />
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="contact-banner reveal" id="contact">
-          <p className="eyebrow">Let's work together</p>
-          <h2>Have a project in mind? I'd love to hear about it.</h2>
-          <p>
+      {/* ─ Contact ─ */}
+      <section className="contact-section" id="contact">
+        <div className="container">
+          <span className="eyebrow reveal">Let's work together</span>
+          <h2 className="contact-h2 reveal">Have a project in mind?</h2>
+          <p className="contact-lead reveal">
             Whether you need a cross-platform mobile app, a scalable web platform, a robust backend API, or an
             AI-powered feature — reach out and let's discuss how I can help bring it to life.
           </p>
-          <div className="social-links">
+          <div className="social-links reveal">
             {socialLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="social-link"
-                target={link.label !== 'Email' ? '_blank' : undefined}
-                rel={link.label !== 'Email' ? 'noopener noreferrer' : undefined}
-              >
-                <span className="social-link-label">{link.label}</span>
-                <span className="social-link-display">{link.display}</span>
-              </a>
+              <div key={link.label} className="social-link-row">
+                <a
+                  href={link.href}
+                  className="social-link"
+                  target={link.label !== 'Email' ? '_blank' : undefined}
+                  rel={link.label !== 'Email' ? 'noopener noreferrer' : undefined}
+                >
+                  <div className="social-link-info">
+                    <span className="social-link-label">{link.label}</span>
+                    <span className="social-link-display">{link.display}</span>
+                  </div>
+                  <span className="social-link-arrow" aria-hidden="true">→</span>
+                </a>
+                {link.copyText && <CopyButton text={link.copyText} />}
+              </div>
             ))}
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
 
-      <footer className="site-footer reveal-delay-2">
-        <p>Mutahir Hussain — Senior Full-Stack &amp; AI Developer</p>
-        <p>{year} &bull; React Native &middot; React JS &middot; C# &middot; PHP Laravel &middot; AI / ML</p>
+      <footer className="site-footer">
+        <div className="container">
+          <p>Mutahir Hussain — Senior Full-Stack &amp; AI Developer</p>
+          <p>{year} &bull; React Native &middot; React JS &middot; C# &middot; PHP Laravel &middot; AI / ML</p>
+        </div>
       </footer>
     </>
   )
 }
 
+// ── Portfolio detail page ─────────────────────────────────────────────────────
+
 function PortfolioDetailsPage() {
+  useScrollReveal()
+
   const { slug } = useParams()
   const project = portfolioHistory.find((item) => item.slug === slug)
 
-  if (!project) {
-    return <Navigate to="/" replace />
-  }
+  if (!project) return <Navigate to="/" replace />
 
   return (
     <div className="portfolio-detail-shell">
-      <header className="section-grid reveal">
-        <p className="eyebrow">Portfolio case study</p>
-        <h1>{project.title}</h1>
-        <div className="detail-hero-image-wrap">
-          <img src={project.image} alt={project.imageAlt} className="detail-hero-image" />
+      <nav className="topbar">
+        <div className="topbar-inner">
+          <div className="brand-block">
+            <span className="brand-mark">MH</span>
+            <div>
+              <p className="brand-name">Mutahir Hussain</p>
+              <p className="brand-meta">Portfolio case study</p>
+            </div>
+          </div>
+          <div className="nav-links">
+            <Link className="link-button" to="/">← Back to Home</Link>
+          </div>
         </div>
-        <p className="hero-text">{project.summary}</p>
-        <div className="detail-actions">
-          <Link className="secondary-button" to="/">
-            Back to Home
-          </Link>
+      </nav>
+
+      <header className="portfolio-detail-header">
+        <div className="container">
+          <span className="eyebrow reveal">Portfolio case study</span>
+          <h1 className="reveal">{project.title}</h1>
+          <p className="hero-text reveal">{project.summary}</p>
+          <div className="detail-actions reveal">
+            <Link className="btn-secondary" to="/">Back to Home</Link>
+          </div>
+          <div className="detail-hero-image-wrap reveal">
+            <img src={project.image} alt={project.imageAlt} className="detail-hero-image" />
+          </div>
         </div>
       </header>
 
-      <main className="portfolio-detail-main">
-        <section className="section-grid reveal">
-          <SectionTitle
-            eyebrow="ATS quick view"
-            title="Structured role summary"
-            text="This format is intentionally ATS-friendly with direct labels, measurable outcomes, and searchable keywords."
-          />
-          <div className="ats-grid">
-            <article className="ats-card">
-              <h3>Client</h3>
-              <p>{project.ats.client}</p>
-            </article>
-            <article className="ats-card">
-              <h3>Role</h3>
-              <p>{project.ats.role}</p>
-            </article>
-            <article className="ats-card">
-              <h3>Timeline</h3>
-              <p>{project.ats.timeline}</p>
-            </article>
-            <article className="ats-card">
-              <h3>Impact</h3>
-              <p>{project.ats.impact}</p>
-            </article>
+      <div className="portfolio-detail-content">
+        <section className="detail-section">
+          <div className="container">
+            <SectionHeading
+              eyebrow="ATS quick view"
+              title="Structured role summary"
+              text="ATS-friendly format with direct labels, measurable outcomes, and searchable keywords."
+            />
+            <div className="ats-grid">
+              {[
+                { label: 'Client', value: project.ats.client },
+                { label: 'Role', value: project.ats.role },
+                { label: 'Timeline', value: project.ats.timeline },
+                { label: 'Impact', value: project.ats.impact },
+              ].map((item) => (
+                <article className="ats-card reveal" key={item.label}>
+                  <h3>{item.label}</h3>
+                  <p>{item.value}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
-        <section className="section-grid reveal-delay-1">
-          <SectionTitle
-            eyebrow="Responsibilities"
-            title="What was delivered"
-            text="Bullet structure helps recruiters and ATS tools parse responsibilities clearly."
-          />
-          <ul className="ats-list">
-            {project.ats.responsibilities.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
+        <section className="detail-section section-alt">
+          <div className="container">
+            <SectionHeading
+              eyebrow="Responsibilities"
+              title="What was delivered"
+              text="Bullet structure helps recruiters and ATS tools parse responsibilities clearly."
+            />
+            <ul className="ats-list">
+              {project.ats.responsibilities.map((line) => (
+                <li className="reveal" key={line}>{line}</li>
+              ))}
+            </ul>
+          </div>
         </section>
 
-        <section className="section-grid reveal-delay-2">
-          <SectionTitle
-            eyebrow="Keywords and stack"
-            title="Technical profile"
-            text="Use these tags as searchable skills aligned to role descriptions."
-          />
-          <div className="chip-wrap">
-            {project.ats.keywords.map((item) => (
-              <span className="chip" key={item}>
-                {item}
-              </span>
-            ))}
-          </div>
-          <h3 className="mini-heading">Technology stack</h3>
-          <div className="chip-wrap">
-            {project.ats.stack.map((item) => (
-              <span className="chip chip-tech" key={item}>
-                {item}
-              </span>
-            ))}
+        <section className="detail-section">
+          <div className="container">
+            <SectionHeading
+              eyebrow="Keywords and stack"
+              title="Technical profile"
+              text="Use these tags as searchable skills aligned to role descriptions."
+            />
+            <div className="chip-wrap reveal">
+              {project.ats.keywords.map((item) => (
+                <span className="chip" key={item}>{item}</span>
+              ))}
+            </div>
+            <h3 className="mini-heading">Technology stack</h3>
+            <div className="chip-wrap reveal">
+              {project.ats.stack.map((item) => (
+                <span className="chip chip-tech" key={item}>{item}</span>
+              ))}
+            </div>
           </div>
         </section>
-      </main>
+      </div>
     </div>
   )
 }
 
+// ── App root ──────────────────────────────────────────────────────────────────
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(true)
+  const year = useMemo(() => new Date().getFullYear(), [])
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setIsLoading(false), 3000)
+    const timer = window.setTimeout(() => setIsLoading(false), 1000)
     return () => window.clearTimeout(timer)
   }, [])
 
-  const year = useMemo(() => new Date().getFullYear(), [])
-
-  if (isLoading) {
-    return <Loader />
-  }
+  if (isLoading) return <Loader />
 
   return (
     <div className="page-shell">
-      <div className="background-orb background-orb-left" />
-      <div className="background-orb background-orb-right" />
-
+      <div className="bg-orb bg-orb-1" aria-hidden="true" />
+      <div className="bg-orb bg-orb-2" aria-hidden="true" />
+      <div className="bg-orb bg-orb-3" aria-hidden="true" />
       <Routes>
         <Route path="/" element={<HomePage year={year} />} />
         <Route path="/portfolio/:slug" element={<PortfolioDetailsPage />} />

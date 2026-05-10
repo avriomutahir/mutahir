@@ -5,7 +5,7 @@ export const portfolioHistory = [
     type: 'Artificial Intelligence · Machine Learning',
     summary:
       'Designed and built an end-to-end AI platform that extracts text from scanned documents via OCR and runs real-time sentiment analysis on customer feedback.',
-    image: `${import.meta.env.BASE_URL}images/portfolio-forecasting.svg`,
+    image: '/images/portfolio-forecasting.svg',
     imageAlt: 'AI OCR and sentiment analysis dashboard preview',
     ats: {
       client: 'Enterprise SaaS Client',
@@ -28,7 +28,7 @@ export const portfolioHistory = [
     type: 'Mobile Development · React Native',
     summary:
       'Built a feature-rich cross-platform mobile application for iOS and Android using React Native, delivering a native-quality experience from a single codebase.',
-    image: `${import.meta.env.BASE_URL}images/portfolio-design-system.svg`,
+    image: '/images/portfolio-design-system.svg',
     imageAlt: 'React Native mobile app screens and component design',
     ats: {
       client: 'Product-stage startup',
@@ -51,7 +51,7 @@ export const portfolioHistory = [
     type: 'Full-Stack Web Development',
     summary:
       'Delivered a large-scale enterprise web platform with a PHP Laravel backend, React JS frontend, and role-based access control for multi-tenant business operations.',
-    image: `${import.meta.env.BASE_URL}images/portfolio-rebrand.svg`,
+    image: '/images/portfolio-rebrand.svg',
     imageAlt: 'Enterprise web platform dashboard and admin panel',
     ats: {
       client: 'B2B Enterprise Client',
